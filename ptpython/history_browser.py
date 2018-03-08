@@ -19,7 +19,7 @@ from prompt_toolkit.layout.controls import BufferControl, FormattedTextControl
 from prompt_toolkit.layout.dimension import Dimension as D
 from prompt_toolkit.layout.layout import Layout
 from prompt_toolkit.layout.margins import Margin, ScrollbarMargin
-from prompt_toolkit.layout.processors import Processor, Transformation, HighlightSearchProcessor, HighlightIncrementalSearchProcessor, HighlightSelectionProcessor
+from prompt_toolkit.layout.processors import Processor, Transformation
 from prompt_toolkit.lexers import PygmentsLexer
 from prompt_toolkit.widgets import Frame
 from prompt_toolkit.widgets.toolbars import ArgToolbar, SearchToolbar
@@ -493,12 +493,12 @@ def create_key_bindings(history, python_input, history_mapping):
     @handle('c-g', filter=main_buffer_focussed)
     def _(event):
         " Cancel and go back. "
-        event.app.set_return_value(None)
+        event.app.set_result(None)
 
     @handle('enter', filter=main_buffer_focussed)
     def _(event):
         " Accept input. "
-        event.app.set_return_value(history.default_buffer.text)
+        event.app.set_result(history.default_buffer.text)
 
     enable_system_bindings = Condition(lambda: python_input.enable_system_bindings)
 
@@ -532,7 +532,7 @@ class History(object):
             document=document,
             on_cursor_position_changed=self._history_buffer_pos_changed,
             accept_handler=(
-                lambda buff: get_app().set_return_value(self.default_buffer.text)),
+                lambda buff: get_app().set_result(self.default_buffer.text)),
             read_only=True)
 
         self.default_buffer = Buffer(

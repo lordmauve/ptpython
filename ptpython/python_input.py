@@ -249,7 +249,7 @@ class PythonInput(object):
 
     def _accept_handler(self, buff):
         app = get_app()
-        app.set_return_value(buff.text)
+        app.set_result(buff.text)
         app.pre_run_callables.append(buff.reset)
 
     @property
@@ -648,7 +648,6 @@ class PythonInput(object):
 
         def done(f):
             result = f.result()
-            assert isinstance(result, str), 'got %r' % (result, )
             if result is not None:
                 self.default_buffer.text = result
 
